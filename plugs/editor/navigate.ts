@@ -126,7 +126,11 @@ async function actionClickOrActionEnter(
       if (!urlNode) {
         return;
       }
-      const url = urlNode.children![0].text!;
+      let url = urlNode.children![0].text!;
+      // CommonMark allows the destination to be wrapped: [title](<url>)
+      if (url.startsWith("<") && url.endsWith(">")) {
+        url = url.slice(1, -1);
+      }
       if (url.length <= 1) {
         return editor.flashNotification("Empty link, ignoring", "error");
       }
